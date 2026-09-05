@@ -1,56 +1,60 @@
-import { createSchema } from "@ponder/core";
+import { onchainTable } from "ponder";
 
-export default createSchema((p) => ({
-  Token: p.createTable({
-    id: p.string(), // Format: collectionAddress-tokenId
-    collectionAddress: p.string(),
-    tokenId: p.bigint(),
-    owner: p.string(),
-  }),
-  TransferEvent: p.createTable({
-    id: p.string(), // Format: transactionHash-logIndex
-    collectionAddress: p.string(),
-    tokenId: p.bigint(),
-    from: p.string(),
-    to: p.string(),
-    timestamp: p.bigint(),
-  }),
-  CollectionOwnership: p.createTable({
-    id: p.string(), // Format: collectionAddress
-    owner: p.string(),
-  }),
-  Listing: p.createTable({
-    id: p.string(), // Format: nftAddress-tokenId
-    collectionAddress: p.string(),
-    tokenId: p.bigint(),
-    seller: p.string(),
-    price: p.bigint(),
-    expiresAt: p.bigint(),
-    isActive: p.boolean(),
-  }),
-  Sale: p.createTable({
-    id: p.string(), // Format: txHash-logIndex
-    collectionAddress: p.string(),
-    tokenId: p.bigint(),
-    buyer: p.string(),
-    seller: p.string(),
-    price: p.bigint(),
-    timestamp: p.bigint(),
-  }),
-  Offer: p.createTable({
-    id: p.string(), // Format: nftAddress-tokenId-bidder
-    collectionAddress: p.string(),
-    tokenId: p.bigint(),
-    bidder: p.string(),
-    amount: p.bigint(),
-    expiresAt: p.bigint(),
-    isActive: p.boolean(),
-  }),
-  Collection: p.createTable({
-    id: p.string(), // Format: collectionAddress
-    owner: p.string(),
-    name: p.string(),
-    symbol: p.string(),
-    launchedAt: p.bigint(),
-  }),
+export const token = onchainTable("token", (t) => ({
+  id: t.text().primaryKey(), // Format: collectionAddress-tokenId
+  collectionAddress: t.text().notNull(),
+  tokenId: t.bigint().notNull(),
+  owner: t.text().notNull(),
+}));
+
+export const transferEvent = onchainTable("transfer_event", (t) => ({
+  id: t.text().primaryKey(), // Format: transactionHash-logIndex
+  collectionAddress: t.text().notNull(),
+  tokenId: t.bigint().notNull(),
+  from: t.text().notNull(),
+  to: t.text().notNull(),
+  timestamp: t.bigint().notNull(),
+}));
+
+export const collectionOwnership = onchainTable("collection_ownership", (t) => ({
+  id: t.text().primaryKey(), // Format: collectionAddress
+  owner: t.text().notNull(),
+}));
+
+export const listing = onchainTable("listing", (t) => ({
+  id: t.text().primaryKey(), // Format: nftAddress-tokenId
+  collectionAddress: t.text().notNull(),
+  tokenId: t.bigint().notNull(),
+  seller: t.text().notNull(),
+  price: t.bigint().notNull(),
+  expiresAt: t.bigint().notNull(),
+  isActive: t.boolean().notNull(),
+}));
+
+export const sale = onchainTable("sale", (t) => ({
+  id: t.text().primaryKey(), // Format: txHash-logIndex
+  collectionAddress: t.text().notNull(),
+  tokenId: t.bigint().notNull(),
+  buyer: t.text().notNull(),
+  seller: t.text().notNull(),
+  price: t.bigint().notNull(),
+  timestamp: t.bigint().notNull(),
+}));
+
+export const offer = onchainTable("offer", (t) => ({
+  id: t.text().primaryKey(), // Format: nftAddress-tokenId-bidder
+  collectionAddress: t.text().notNull(),
+  tokenId: t.bigint().notNull(),
+  bidder: t.text().notNull(),
+  amount: t.bigint().notNull(),
+  expiresAt: t.bigint().notNull(),
+  isActive: t.boolean().notNull(),
+}));
+
+export const collection = onchainTable("collection", (t) => ({
+  id: t.text().primaryKey(), // Format: collectionAddress
+  owner: t.text().notNull(),
+  name: t.text().notNull(),
+  symbol: t.text().notNull(),
+  launchedAt: t.bigint().notNull(),
 }));
