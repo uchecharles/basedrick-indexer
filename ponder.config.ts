@@ -1,28 +1,45 @@
-import { createConfig } from "ponder";
-import { http } from "viem";
+import { createConfig } from "@ponder/core";
+import { http, parseAbiItem } from "viem";
 
-import { FACTORY_ABI } from "./abis/FactoryAbi";
-import { MARKETPLACE_ABI } from "./abis/MarketplaceAbi";
+import { BasedRickLaunchpadAbi } from "./abis/BasedRickLaunchpad";
+import { BasedRickMarketplaceAbi } from "./abis/MarketplaceAbi";
+import { LaunchpadFactoryAbi } from "./abis/FactoryAbi";
+
+export const LAUNCHPAD_FACTORY_ADDRESS =
+  "0x253FC033d3639A2d1df017685dB4837aC8C34a2B" as `0x${string}`;
+
+export const MARKETPLACE_ADDRESS =
+  "0x588E5805e3Db9e42F4669a016D9d248F365b2db2" as `0x${string}`;
+
+export const LAUNCHPAD_IMPLEMENTATION_ADDRESS =
+  "0xBC5bE44D2BA497c8dD07Ca382252b882CBee569e" as `0x${string}`;
 
 export default createConfig({
-  chains: {
-    baseSepolia: {
-      id: 84532,
-      rpc: http(process.env.PONDER_RPC_URL_84532),
-    },
+  networks: {
+    baseSepolia: { chainId: 84532, transport: http(process.env.PONDER_RPC_URL_84532) },
   },
   contracts: {
-  LaunchpadFactory: {
-    abi: FACTORY_ABI,
-    chain: "baseSepolia",
-    address: "0x253FC033d3639A2d1df017685dB4837aC8C34a2B", 
-    startBlock: 45774287, // <-- Paste Factory block here
+    LaunchpadFactory: {
+      network: "baseSepolia",
+      abi: LaunchpadFactoryAbi,
+      address: "0x253FC033d3639A2d1df017685dB4837aC8C34a2B", 
+      startBlock: 45796720, 
+    },
+    BasedRickLaunchpad: {
+      network: "baseSepolia",
+      abi: BasedRickLaunchpadAbi,
+      factory: {
+        address: "0xBC5bE44D2BA497c8dD07Ca382252b882CBee569e", 
+        event: parseAbiItem("event CollectionLaunched(address indexed collectionAddress, address indexed owner, string name, string symbol)"),
+        parameter: "collectionAddress",
+      },
+      startBlock: 45796719, 
+    },
+    BasedRickMarketplace: {
+      network: "baseSepolia",
+      abi: BasedRickMarketplaceAbi,
+      address: "0x588E5805e3Db9e42F4669a016D9d248F365b2db2", 
+      startBlock: 45774287, 
+    },
   },
-  BasedRickMarketplace: {
-    abi: MARKETPLACE_ABI,
-    chain: "baseSepolia",
-    address: "0x588E5805e3Db9e42F4669a016D9d248F365b2db2", 
-    startBlock: 45774287 , // <-- Paste Marketplace block here
-  },
-}
 });
